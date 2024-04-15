@@ -44,8 +44,17 @@ class PostController
         header("Content-Type: application/json");
         if ($id) {
             //TODO 5-c i: get a post data by id
+            $post = Post::find($id);
+            if ($post) {
+                echo json_encode($post);
+            } else {
+                http_response_code(404);
+                echo json_encode(['error' => 'Post not found']);
+            }
         } else {
             //TODO 5-a: get all posts
+            $posts = Post::all();
+            echo json_encode($posts);
         }
 
         exit();
@@ -59,6 +68,10 @@ class PostController
         $postData = $this->validatePost($inputData);
 
         //TODO 5-b: save a post
+        $post = new Post;
+        $post->title = $postData['title'];
+        $post->description = $postData['description'];
+        $post->save();
 
         http_response_code(200);
         echo json_encode([
@@ -83,11 +96,17 @@ class PostController
         $postData = $this->validatePost($inputData);
 
         //TODO 5-c: update a post
+        $post = Post::find($id);
+        if ($post) {
+            $post->title = $postData['title'];
+            $post->description = $postData['description'];
+            $post->save();
+            echo json_encode(['success' => true]);
+        } else {
+            http_response_code(404);
+            echo json_encode(['error' => 'Post not found']);
+        }
 
-        http_response_code(200);
-        echo json_encode([
-            'success' => true
-        ]);
         exit();
     }
 
@@ -98,11 +117,15 @@ class PostController
         }
 
         //TODO 5-d: delete a post
+        $post = Post::find($id);
+        if ($post) {
+            $post->delete();
+            echo json_encode(['success' => true]);
+        } else {
+            http_response_code(404);
+            echo json_encode(['error' => 'Post not found']);
+        }
 
-        http_response_code(200);
-        echo json_encode([
-            'success' => true
-        ]);
         exit();
     }
 
@@ -125,6 +148,4 @@ class PostController
         include '../public/assets/views/post/posts-update.html';
         exit();
     }
-
-
 }
