@@ -1,7 +1,9 @@
 <?php
 
-define('DBNAME', $env['DBNAME']);
-define('DBHOST', $env['DBHOST']);
-define('DBUSER', $env['DBUSER']);
-define('DBPASS', $env['DBPASS']);
-define('DBDRIVER', '');
+$config = [
+    'DBNAME' => 'homework_9',
+    'DBHOST' => 'localhost@root',
+    'DBUSER' => 'root',
+    'DBPASS' => 'root'
+  ];
+
